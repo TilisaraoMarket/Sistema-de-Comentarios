@@ -48,10 +48,13 @@
     </div>
 
     <script>
-        const GITHUB_TOKEN = process.env.GITHUB_TOKEN || 'REEMPLAZAR_CON_TU_TOKEN'; // Reemplaza con tu método seguro
-        const REPO_OWNER = 'tilisaraomarket'; // Reemplaza con tu usuario de GitHub
-        const REPO_NAME = 'Sistema-de-Comentarios'; // Nombre del repositorio actualizado
-        const DISCUSSION_NUMBER = 1; // Reemplaza con el número de la discusión
+        // Reemplazar process.env con una variable global para el navegador
+        const GITHUB_TOKEN = window.GITHUB_TOKEN || 'REEMPLAZAR_CON_TU_TOKEN'; // Define GITHUB_TOKEN en el navegador
+
+        // Asegurar que las variables estén definidas antes de usarse
+        const REPO_OWNER = 'tilisaraomarket';
+        const REPO_NAME = 'Sistema-de-Comentarios';
+        const DISCUSSION_NUMBER = 1;
 
         // Mostrar un mensaje de carga mientras se obtienen los comentarios
         function showLoadingMessage() {
