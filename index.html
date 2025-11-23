@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Comentarios</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #comments {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        #comments-list p {
+            background: #f4f4f4;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        #comment-input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            background: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div id="comments">
+        <h3>Comentarios</h3>
+        <div id="comments-list"></div>
+        <textarea id="comment-input" placeholder="Escribe tu comentario..."></textarea>
+        <button onclick="postComment()">Enviar</button>
+    </div>
+
+    <script>
+        const GITHUB_TOKEN = 'TU_TOKEN_DE_GITHUB'; // Reemplaza con tu token
+        const REPO_OWNER = 'TU_USUARIO'; // Reemplaza con tu usuario de GitHub
+        const REPO_NAME = 'TU_REPO'; // Reemplaza con el nombre de tu repositorio
+        const DISCUSSION_NUMBER = 1; // Reemplaza con el número de la discusión
+
+        // Función para obtener comentarios
+        async function fetchComments() {
+            try {
+                const response = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/discussions/${DISCUSSION_NUMBER}/comments`, {
+                    headers: {
+                        Authorization: `Bearer ${GITHUB_TOKEN}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Error al obtener los comentarios');
+                }
+
+                const comments = await response.json();
+                const commentsList = document.getElementById('comments-list');
+                commentsList.innerHTML = comments.map(comment => `<p>${comment.body}</p>`).join('');
+            } catch (error) {
+                console.error(error);
+                alert('No se pudieron cargar los comentarios. Verifica la consola para más detalles.');
+            }
+        }
+
+        // Función para enviar un comentario
+        async function postComment() {
+            const commentInput = document.getElementById('comment-input');
+            const body = commentInput.value;
+
+            if (!body.trim()) {
+                alert('El comentario no puede estar vacío.');
+                return;
+            }
+
+            try {
+                const response = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/discussions/${DISCUSSION_NUMBER}/comments`, {
+                    method: 'POST',
+                    headers: {
+                        Authorization: `Bearer ${GITHUB_TOKEN}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ body })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Error al enviar el comentario');
+                }
+
+                commentInput.value = '';
+                fetchComments();
+            } catch (error) {
+                console.error(error);
+                alert('No se pudo enviar el comentario. Verifica la consola para más detalles.');
+            }
+        }
+
+        // Cargar comentarios al cargar la página
+        fetchComments();
+    </script>
+</body>
+</html>
