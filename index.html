@@ -40,6 +40,12 @@
     </style>
 </head>
 <body>
+    <div style="max-width: 600px; margin: 0 auto 16px; display: flex; align-items: center; gap: 8px;">
+        <span style="font-weight: 600;">Visitas:</span>
+        <img
+          src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Ftilisaraomarket.github.io%2FSistema-de-Comentarios%2F&count_bg=%2379C83D&title_bg=%23555555&title=visitas&edge_flat=true"
+          alt="visitas" />
+    </div>
     <div id="comments">
         <h3>Comentarios</h3>
         <div id="comments-list"></div>
@@ -48,13 +54,13 @@
     </div>
 
     <script>
-        // Reemplazar process.env con una variable global para el navegador
-        const GITHUB_TOKEN = window.GITHUB_TOKEN || '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'; // Define GITHUB_TOKEN en el navegador
-
-        // Asegurar que las variables estén definidas antes de usarse
+        // Definir las variables al inicio del script
         const REPO_OWNER = 'tilisaraomarket';
         const REPO_NAME = 'Sistema-de-Comentarios';
         const DISCUSSION_NUMBER = 1;
+
+        // Reemplazar process.env con una variable global o atributo de script
+        const GITHUB_TOKEN = window.GITHUB_TOKEN || 'REEMPLAZAR_CON_TU_TOKEN'; // Define GITHUB_TOKEN en el navegador
 
         // Mostrar un mensaje de carga mientras se obtienen los comentarios
         function showLoadingMessage() {
@@ -125,5 +131,4 @@
         fetchComments();
     </script>
 </body>
-
 </html>
