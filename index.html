@@ -42,10 +42,18 @@
 <body>
     <div style="max-width: 600px; margin: 0 auto 16px; display: flex; align-items: center; gap: 8px;">
         <span style="font-weight: 600;">Visitas:</span>
-        <img
-          src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Ftilisaraomarket.github.io%2FSistema-de-Comentarios%2F&count_bg=%2379C83D&title_bg=%23555555&title=visitas&edge_flat=true"
-          alt="visitas" />
+        <img id="visitas" alt="visitas" />
     </div>
+    <script>
+      (function(){
+        var base = "https://hits.seeyoufarm.com/api/count/incr/badge.svg";
+        var url = encodeURIComponent(location.href.split("#")[0].replace(/\/?$/, "/"));
+        var badge = base + "?url=" + url + "&count_bg=%2379C83D&title_bg=%23555555&title=visitas&edge_flat=true";
+        var img = document.getElementById("visitas");
+        if (img) img.src = badge;
+      })();
+    </script>
+
     <div id="comments">
         <h3>Comentarios</h3>
         <div id="comments-list"></div>
