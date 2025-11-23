@@ -4,11 +4,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Comentarios</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Poppins', Arial, sans-serif;
             margin: 20px;
         }
+        :root{
+            --bg: #0f1226;
+            --card: #121534;
+            --text: #e7e7ef;
+            --muted: #b6b7c9;
+            --accent: #7c3aed;
+            --accent-2: #06b6d4;
+            --btn: #7c3aed;
+        }
+        body{
+            background: radial-gradient(1200px 600px at 10% 0%, rgba(124,58,237,0.25), transparent 60%),
+                        radial-gradient(1000px 600px at 100% 0%, rgba(6,182,212,0.25), transparent 60%),
+                        var(--bg);
+            color: var(--text);
+        }
+        .header{
+            max-width: 1100px; margin: 0 auto 16px; display:flex; align-items:center; justify-content:space-between;
+        }
+        .brand{ font-weight:700; letter-spacing:0.5px; font-size:22px; }
+        .actions{ display:flex; gap:10px; align-items:center; }
+        .toggle{ border:1px solid rgba(255,255,255,0.15); background:transparent; color:var(--text); padding:8px 12px; border-radius:10px; }
+        .toggle:hover{ background:rgba(255,255,255,0.06); }
+        .hero{
+            max-width:1100px; margin: 10px auto 24px; padding: 28px; border-radius:16px;
+            background: linear-gradient(135deg, rgba(124,58,237,0.20), rgba(6,182,212,0.12));
+            border:1px solid rgba(255,255,255,0.12);
+        }
+        .hero h1{ font-size:32px; margin:0 0 8px; }
+        .hero p{ color: var(--muted); margin:0 0 16px; }
+        .cta{ display:flex; gap:12px; flex-wrap:wrap; }
+        .btn{ padding:12px 16px; border-radius:10px; border:1px solid rgba(255,255,255,0.15); color:var(--text); text-decoration:none; display:inline-block; }
+        .btn-primary{ background: linear-gradient(135deg, var(--accent), var(--accent-2)); border-color: transparent; }
+        .btn-secondary{ background: transparent; }
         #comments {
             max-width: 600px;
             margin: 0 auto;
@@ -19,6 +55,7 @@
             border-radius: 5px;
             margin-bottom: 10px;
         }
+        body.dark #comments-list p{ background:#1d214d; color:var(--text); }
         #comment-input {
             width: 100%;
             padding: 10px;
@@ -37,23 +74,53 @@
         button:hover {
             background: #0056b3;
         }
+        .player{
+            position: fixed; left: 50%; transform: translateX(-50%);
+            bottom: 16px; width: min(94%, 720px);
+            background: rgba(18,21,52,0.85); backdrop-filter: blur(8px);
+            border:1px solid rgba(255,255,255,0.12); border-radius: 12px;
+            padding: 10px 12px; z-index: 50; color: var(--text);
+            display:flex; align-items:center; gap:12px;
+        }
+        .player b{ font-weight:600; }
+        body.dark{ --bg:#0b0d1d; --card:#0f1230; --text:#e7e7ef; --muted:#b6b7c9; }
     </style>
 </head>
 <body>
-    <div style="max-width: 600px; margin: 0 auto 16px; display: flex; align-items: center; gap: 8px;">
-        <span style="font-weight: 600;">Visitas:</span>
-        <img id="visitas" alt="visitas" />
+    <header class="header">
+        <div class="brand">Tili Music</div>
+        <div class="actions">
+            <button class="toggle" id="modeToggle">Modo oscuro</button>
+        </div>
+    </header>
+    <section class="hero">
+        <h1>Beats, demos y lanzamientos</h1>
+        <p>Escucha mis últimas pistas, deja comentarios y súmate a la comunidad.</p>
+        <div class="cta">
+            <a class="btn btn-primary" href="#player">Escuchar ahora</a>
+            <a class="btn btn-secondary" href="mailto:contacto@example.com">Contactar</a>
+        </div>
+    </section>
+    <div style="max-width: 600px; margin: 0 auto 16px; padding: 10px; background: rgba(255, 255, 255, 0.05); border-radius: 8px; text-align: center;">
+        <span style="font-weight: 600; color: var(--accent);">Visitas: </span>
+        <span id="visitorCounter" style="font-weight: 700; font-size: 1.1em;">0</span>
+    </div>
+    <div class="player" id="player">
+        <b>Reproductor</b>
+        <audio controls preload="none" style="flex:1; max-width:100%;">
+            <source src="https://www.w3schools.com/html/horse.mp3" type="audio/mpeg">
+        </audio>
     </div>
     <script>
       (function(){
-        var base = "https://hits.seeyoufarm.com/api/count/incr/badge.svg";
-        var url = encodeURIComponent(location.href.split("#")[0].replace(/\/?$/, "/"));
-        var badge = base + "?url=" + url + "&count_bg=%2379C83D&title_bg=%23555555&title=visitas&edge_flat=true";
-        var img = document.getElementById("visitas");
-        if (img) img.src = badge;
+        var key = 'pref-theme';
+        var btn = document.getElementById('modeToggle');
+        function apply(mode){ document.body.classList.toggle('dark', mode === 'dark'); btn.textContent = mode==='dark' ? 'Modo claro' : 'Modo oscuro'; }
+        var saved = localStorage.getItem(key) || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark':'light');
+        apply(saved);
+        btn.addEventListener('click', function(){ var next = document.body.classList.contains('dark') ? 'light':'dark'; localStorage.setItem(key, next); apply(next); });
       })();
     </script>
-
     <div id="comments">
         <h3>Comentarios</h3>
         <div id="comments-list"></div>
